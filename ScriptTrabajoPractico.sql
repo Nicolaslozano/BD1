@@ -293,6 +293,34 @@ DELIMITER ;
 call altaInsumo(1,'tornillos',30);
 call modificarInsumo(1,'bujias',50);
 
+-- alta Consecionaria
+DELIMITER $$
+CREATE PROCEDURE altaConsecioanria( IN  _idConcesionaria INT, IN  _nombre_concesionaria varchar(45), IN _numero_ventas INT)
+BEGIN
+INSERT INTO Concesionaria (idConcesionaria, nombre_concesionaria, numero_ventas) VALUES (_idConcesionaria,_Nombre_concesionaria,_numero_ventas);
+END $$
+DELIMITER ;
+
+-- bajaConcesionaria
+DELIMITER $$
+CREATE PROCEDURE bajaConcesionaria (IN _idConcesionaria INT)
+BEGIN
+    DELETE FROM Insumo WHERE Concesionaria.idConcesionaria = _idConcesionaria;
+END $$
+DELIMITER ;
+
+-- modificacion Concesionaria
+DELIMITER $$
+CREATE PROCEDURE modificarConcesionaria(IN _idConcesionaria INT, IN  _nombre_concesionaria varchar(45),IN _numero_ventas INT)
+BEGIN
+UPDATE Concesionaria SET Concesionaria.idConcesionaria = _idConcesionaria WHERE (idConcesionaria = _idConcesionaria);
+UPDATE Concesionaria SET Concesionaria.nombreConcesionaria = _nombre_concesionaria WHERE (nombre_concesionaria = _nombre_concesionaria);
+UPDATE Concesionaria SET Concesionaria.numero_ventas = _numero_ventas WHERE (numero_ventas = _numero_ventas);
+END $$
+DELIMITER ;
+
+call altaConcesionaria (1,Ford,5);
+call modificarConcesionaria(1,FordArg,6);
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
