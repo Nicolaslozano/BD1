@@ -314,8 +314,8 @@ DELIMITER $$
 CREATE PROCEDURE modificarConcesionaria(IN _idConcesionaria INT, IN  _nombre_concesionaria varchar(45),IN _numero_ventas INT)
 BEGIN
 UPDATE Concesionaria SET Concesionaria.idConcesionaria = _idConcesionaria WHERE (idConcesionaria = _idConcesionaria);
-UPDATE Concesionaria SET Concesionaria.nombreConcesionaria = _nombre_concesionaria WHERE (nombre_concesionaria = _nombre_concesionaria);
-UPDATE Concesionaria SET Concesionaria.numero_ventas = _numero_ventas WHERE (numero_ventas = _numero_ventas);
+UPDATE Concesionaria SET Concesionaria.nombreConcesionaria = _nombre_concesionaria WHERE (idConcesionaria = _idConcesionaria);
+UPDATE Concesionaria SET Concesionaria.numero_ventas = _numero_ventas WHERE (idConcesionaria = _idConcesionaria);
 END $$
 DELIMITER ;
 
@@ -370,6 +370,9 @@ DELIMITER ;
 
 call altaConcesionaria (1,Ford,5);
 call modificarConcesionaria(1,FordArg,6);
+       
+                                                                                                                         
+                                                                                                                         
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
