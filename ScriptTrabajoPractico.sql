@@ -313,6 +313,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE modificarConcesionaria(IN _idConcesionaria INT, IN  _nombre_concesionaria varchar(45),IN _numero_ventas INT)
 BEGIN
+UPDATE Concesionaria SET Concesionaria.idConcesionaria = _idConcesionaria WHERE (idConcesionaria = _idConcesionaria);
 UPDATE Concesionaria SET Concesionaria.nombreConcesionaria = _nombre_concesionaria WHERE (idConcesionaria = _idConcesionaria);
 UPDATE Concesionaria SET Concesionaria.numero_ventas = _numero_ventas WHERE (idConcesionaria = _idConcesionaria);
 END $$
@@ -367,35 +368,37 @@ UPDATE Estacion SET Nombre_Estacion = _Nombre_Estacion WHERE (idEstacion = _idEs
 END$$
 DELIMITER ;
 
+-- alta Modelo
+DELIMITER $$
+CREATE PROCEDURE altaModelo( IN _idModelo INT, IN _Nombre_Modelo varchar (45))
+BEGIN
+INSERT INTO Modelo (idModelo,Nombre_Provedor) values (_idProvedo,_Nombre_Provedor);
+END $$
+DELIMITER;
+
+-- Mod Modelo
+DELIMITER $$
+CREATE PROCEDURE modificarModelo(IN _idModelo INT, IN _Nombre_Modelo varchar(45))
+BEGIN
+UPDATE Modelo SET Modelo.Nombre_Modelo = _Nombre_Modelo where (idModelo=_idModelo);
+END $$
+DELIMITER;
+
+-- Baja modelo
+DELIMITER $$
+CREATE PROCEDURE bajaModelo(IN _idModelo int)
+BEGIN
+DELETE FROM Modelo where Modelo.idModelo = _idModelo;
+end $$
+DELIMITER ;
+
+
+
+
 call altaConcesionaria (1,Ford,5);
 call modificarConcesionaria(1,FordArg,6);
        
--- Alta Linea de montaje
-DELIMITER $$
-CREATE PROCEDURE altaLineaMontaje( IN  _idLineaMontaje INT, IN  _modelo_idModelo INT, IN _capacidad_produccion INT)
-BEGIN
-INSERT INTO LineaMontaje (idLineaMontaje, modelo_idModelo, CapacidadProduccion) VALUES (_idLineaMontaje,_modelo_idModelo,_capacidad_produccion);
-END $$
-DELIMITER ;
-
--- Baja Linea de Montaje
-DELIMITER $$
-CREATE PROCEDURE bajaLineaMontaje (IN _idLineaMontaje INT)
-BEGIN
-    DELETE FROM LineaMontaje WHERE LineaMontaje.idLineaMontaje = _idLineaMontaje;
-END $$
-DELIMITER ;
-
--- Modificacion Linea de Montaje
-DELIMITER $$
-CREATE PROCEDURE modificarConcesionaria(IN _idLineaMontaje INT, IN  _modelo_idModelo INT,IN _capacidad_produccion INT)
-BEGIN
-UPDATE LineaMontaje SET LineaMontaje.CapacidadProduccion = _capacidad_produccion WHERE (_idLineaMontaje = _idLineaMontaje);
-END $$
-DELIMITER ;
-
-CALL altaLineaMontaje (1,1,4);
-CALL modificacionLineaMontaje(1,1,5);                                                                                                                        
+                                                                                                                         
                                                                                                                          
 
 
