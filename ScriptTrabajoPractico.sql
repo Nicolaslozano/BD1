@@ -370,7 +370,32 @@ DELIMITER ;
 call altaConcesionaria (1,Ford,5);
 call modificarConcesionaria(1,FordArg,6);
        
-                                                                                                                         
+-- Alta Linea de montaje
+DELIMITER $$
+CREATE PROCEDURE altaLineaMontaje( IN  _idLineaMontaje INT, IN  _modelo_idModelo INT, IN _capacidad_produccion INT)
+BEGIN
+INSERT INTO LineaMontaje (idLineaMontaje, modelo_idModelo, CapacidadProduccion) VALUES (_idLineaMontaje,_modelo_idModelo,_capacidad_produccion);
+END $$
+DELIMITER ;
+
+-- Baja Linea de Montaje
+DELIMITER $$
+CREATE PROCEDURE bajaLineaMontaje (IN _idLineaMontaje INT)
+BEGIN
+    DELETE FROM LineaMontaje WHERE LineaMontaje.idLineaMontaje = _idLineaMontaje;
+END $$
+DELIMITER ;
+
+-- Modificacion Linea de Montaje
+DELIMITER $$
+CREATE PROCEDURE modificarConcesionaria(IN _idLineaMontaje INT, IN  _modelo_idModelo INT,IN _capacidad_produccion INT)
+BEGIN
+UPDATE LineaMontaje SET LineaMontaje.CapacidadProduccion = _capacidad_produccion WHERE (_idLineaMontaje = _idLineaMontaje);
+END $$
+DELIMITER ;
+
+CALL altaLineaMontaje (1,1,4);
+CALL modificacionLineaMontaje(1,1,5);                                                                                                                        
                                                                                                                          
 
 
