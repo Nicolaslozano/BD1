@@ -318,8 +318,10 @@ UPDATE Concesionaria SET Concesionaria.numero_ventas = _numero_ventas WHERE (idC
 END $$
 DELIMITER ;
 
-
-                                                                                    -- ALTA Pedido
+call altaConcesionaria (1,Ford,5);
+call modificarConcesionaria(1,FordArg,6);
+                                                                                  
+-- ALTA Pedido
 DELIMITER $$
 CREATE PROCEDURE altaPedido(IN _idPedido INT, IN _FechaEstimada DATE, IN _Consecionaria_idConsecionaria INT)
 begin
@@ -390,9 +392,6 @@ BEGIN
 DELETE FROM Modelo where Modelo.idModelo = _idModelo;
 end $$
 DELIMITER ;
-
-call altaConcesionaria (1,Ford,5);
-call modificarConcesionaria(1,FordArg,6);
        
 -- Alta Linea de montaje
 DELIMITER $$
