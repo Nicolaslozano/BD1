@@ -92,7 +92,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `mydb`.`Estacion` (
   `idEstacion` INT NOT NULL,
   `LineaMontaje_idLineaMontaje` INT NOT NULL,
-  `Estacion` VARCHAR(45) NULL,
+  `Nombre_Estacion` VARCHAR(45) NULL,
   PRIMARY KEY (`idEstacion`),
   INDEX `fk_Estacion_LineaMontaje1_idx` (`LineaMontaje_idLineaMontaje` ASC) VISIBLE,
   CONSTRAINT `fk_Estacion_LineaMontaje1`
@@ -344,6 +344,29 @@ UPDATE Pedido SET FechaEstimada = _FechaEstimada WHERE (idPedido = _idPedido);
 END$$
 DELIMITER ;
 
+-- ALTA ESTACION	
+DELIMITER $$
+CREATE PROCEDURE altaEstacion(IN _idEstacion INT, IN _Linea_Montaje_idLineaMontaje INT, IN _Nombre_Estacion VARCHAR(45))
+begin
+INSERT INTO Estacion (idEstacion, Linea_Montaje_idLineaMontaje, Nombre_Estacion) VALUES (_idEstacion, _Linea_Montaje_idLineaMontaje, _Nombre_Estacion);
+END $$
+DELIMITER ;
+
+-- BAJA ESTACION
+DELIMITER $$
+CREATE PROCEDURE bajaEstacion(IN _idEstacion INT, IN _Linea_Montaje_idLineaMontaje INT, IN _Nombre_Estacion VARCHAR(45))
+begin
+    delete from Estacion where Estacion.idEstacion = _idEstacion;
+end $$
+delimiter;
+
+-- MODIFICACION Estacion
+DELIMITER $$
+CREATE PROCEDURE modificarEstacion(IN _idEstacion INT, IN _Linea_Montaje_idLineaMontaje INT, IN _Nombre_Estacion VARCHAR(45))
+begin
+UPDATE Estacion SET Nombre_Estacion = _Nombre_Estacion WHERE (idEstacion = _idEstacion);
+END$$
+DELIMITER ;
 
 call altaConcesionaria (1,Ford,5);
 call modificarConcesionaria(1,FordArg,6);
