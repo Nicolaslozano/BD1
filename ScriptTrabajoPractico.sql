@@ -313,7 +313,6 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE modificarConcesionaria(IN _idConcesionaria INT, IN  _nombre_concesionaria varchar(45),IN _numero_ventas INT)
 BEGIN
-UPDATE Concesionaria SET Concesionaria.idConcesionaria = _idConcesionaria WHERE (idConcesionaria = _idConcesionaria);
 UPDATE Concesionaria SET Concesionaria.nombreConcesionaria = _nombre_concesionaria WHERE (idConcesionaria = _idConcesionaria);
 UPDATE Concesionaria SET Concesionaria.numero_ventas = _numero_ventas WHERE (idConcesionaria = _idConcesionaria);
 END $$
