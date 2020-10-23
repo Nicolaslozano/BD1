@@ -420,7 +420,29 @@ DELIMITER ;
 CALL altaLineaMontaje (1,1,4);
 CALL modificacionLineaMontaje(1,1,5);                                                                                                                         
                                                                                                                          
+-- ALTA PedidoDetalle
+DELIMITER $$
+CREATE PROCEDURE altaPedidoDetalle (IN _idPedido INT, IN _idModelo INT, IN _cantidad INT)
+begin
+INSERT INTO PedidoDetalle (idPedido, idModelo, cantidad) VALUES (_idPedido, _idModelo, _cantidad);
+END $$
+DELIMITER ;
 
+-- BAJA PedidoDetalle
+DELIMITER $$
+CREATE PROCEDURE bajaPedidoDetalle (IN _idPedido INT)
+begin
+    delete from PedidoDetalle where PedidoDetalle.idPedido = _idPedido;
+end $$
+delimiter;
+
+-- MODIFICACION PedidoDetalle
+DELIMITER $$
+CREATE PROCEDURE modificarPedidoDetalle (IN _idPedido INT, IN _idModelo INT, IN _cantidad INT)
+begin
+UPDATE Pedido SET cantidad = _cantidad WHERE (idPedido = _idPedido);
+END$$
+DELIMITER ;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
