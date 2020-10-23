@@ -132,6 +132,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Auto` (
   `Numero_Chasis` INT NOT NULL,
   `Modelo_idModelo` INT NULL,
   `Terminado` TINYINT NULL,
+  `Patente` VARCHAR(45) NULL,
   PRIMARY KEY (`Numero_Chasis`))
 ENGINE = InnoDB;
 
