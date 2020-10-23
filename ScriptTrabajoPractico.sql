@@ -365,7 +365,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE altaModelo( IN _idModelo INT, IN _Nombre_Modelo varchar (45))
 BEGIN
-INSERT INTO Modelo (idModelo,Nombre_Provedor) values (_idProvedo,_Nombre_Provedor);
+INSERT INTO Modelo (idModelo,Nombre_Modelo) values (_idModelo,_Nombre_Modelo);
 END $$
 DELIMITER;
 
