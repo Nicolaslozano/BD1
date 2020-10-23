@@ -325,7 +325,7 @@ call modificarConcesionaria(1,FordArg,6);
 DELIMITER $$
 CREATE PROCEDURE altaPedido(IN _idPedido INT, IN _FechaEstimada DATE, IN _Consecionaria_idConsecionaria INT)
 begin
-INSERT INTO PedidoAuto (idPedido, FechaEstimada, Consecionaria_idConsecionaria) VALUES (_idPedido, _FechaEstimada, _Consecionaria_idConsecionaria);
+INSERT INTO Pedido (idPedido, FechaEstimada, Consecionaria_idConsecionaria) VALUES (_idPedido, _FechaEstimada, _Consecionaria_idConsecionaria);
 END $$
 DELIMITER ;
 
