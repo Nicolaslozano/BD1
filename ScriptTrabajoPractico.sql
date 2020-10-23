@@ -166,7 +166,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Concesionaria` (
   `idConcesionaria` INT NOT NULL,
   `nombreConcesionaria` VARCHAR(45) NULL,
   `numeroVentas` INT NULL,
-  PRIMARY KEY (`idConsecionaria`))
+  PRIMARY KEY (`idConcesionaria`))
 ENGINE = InnoDB;
 
 
@@ -434,7 +434,7 @@ END$$
 DELIMITER ;
 
 CALL altaLineaMontaje (1,1,4);
-CALL modificacionLineaMontaje(1,1,5);                                                                              
+CALL modificarLineaMontaje(1,1,5);                                                                              
                                                                              
 CALL altaConcesionaria (1,'Ford',5);
 CALL modificarConcesionaria(1,'FordArg',6);
