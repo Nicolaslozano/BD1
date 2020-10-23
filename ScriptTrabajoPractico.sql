@@ -331,7 +331,7 @@ DELIMITER ;
 
 -- BAJA Pedido
 DELIMITER $$
-CREATE PROCEDURE bajaPedido (IN _idPedido INT, IN _FechaEstimada DATE, IN _Consecionaria_idConsecionaria INT)
+CREATE PROCEDURE bajaPedido (IN _idPedido INT)
 begin
     delete from Pedido where Pedido.idPedido = _idPedido;
 end $$
@@ -355,7 +355,7 @@ DELIMITER ;
 
 -- BAJA ESTACION
 DELIMITER $$
-CREATE PROCEDURE bajaEstacion(IN _idEstacion INT, IN _Linea_Montaje_idLineaMontaje INT, IN _Nombre_Estacion VARCHAR(45))
+CREATE PROCEDURE bajaEstacion(IN _idEstacion INT)
 begin
     delete from Estacion where Estacion.idEstacion = _idEstacion;
 end $$
