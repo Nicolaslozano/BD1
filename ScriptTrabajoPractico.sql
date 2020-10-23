@@ -322,7 +322,7 @@ DELIMITER $$
 CREATE PROCEDURE altaPedido(IN _Concesionaria_idConcesionaria INT, IN _id_Modelo INT, IN _cantidad INT)
 BEGIN
 INSERT INTO Pedido (Concesionaria_idConcesionaria) VALUES (_Concesionaria_idConcesionaria);
-CALL altaPedidoDetalle(_cantidad,_id_Modelo);
+CALL altaDetallePedido(_id_Modelo,_cantidad);
 
 END $$
 DELIMITER ;
@@ -420,7 +420,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE altaDetallePedido ( IN _idModelo INT, IN _cantidad INT)
 begin
-INSERT INTO DetallePedido (idModelo, cantidad) VALUES (_idModelo, _cantidad);
+INSERT INTO DetallePedido (Modelo_idModelo, cantidad) VALUES (_idModelo, _cantidad);
 END $$
 DELIMITER ;
 
