@@ -1,5 +1,5 @@
 -- MySQL Workbench Forward Engineering
-
+drop schema mydb;
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
@@ -21,7 +21,7 @@ USE `mydb` ;
 -- Table `mydb`.`Provedor`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Provedor` (
-  `idProvedor` INT NOT NULL,
+  `idProvedor` INT NOT NULL AUTO_INCREMENT,
   `Nombre_Provedor` VARCHAR(45) NULL,
   PRIMARY KEY (`idProvedor`))
 ENGINE = InnoDB;
@@ -31,7 +31,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`Insumo`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Insumo` (
-  `idInsumo` INT NOT NULL,
+  `idInsumo` INT NOT NULL AUTO_INCREMENT,
   `descripcion` VARCHAR(45) NULL,
   `precio` INT NULL,
   PRIMARY KEY (`idInsumo`))
@@ -63,7 +63,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`Modelo`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Modelo` (
-  `idModelo` INT NOT NULL,
+  `idModelo` INT NOT NULL AUTO_INCREMENT,
   `Nombre_Modelo` VARCHAR(45) NULL,
   PRIMARY KEY (`idModelo`))
 ENGINE = InnoDB;
@@ -73,7 +73,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`LineaMontaje`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`LineaMontaje` (
-  `idLineaMontaje` INT NOT NULL,
+  `idLineaMontaje` INT NOT NULL AUTO_INCREMENT,
   `Modelo_idModelo` INT NOT NULL,
   `CapacidadProduccion` INT NULL,
   PRIMARY KEY (`idLineaMontaje`),
@@ -90,7 +90,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`Estacion`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Estacion` (
-  `idEstacion` INT NOT NULL,
+  `idEstacion` INT NOT NULL AUTO_INCREMENT,
   `LineaMontaje_idLineaMontaje` INT NOT NULL,
   `Nombre_Estacion` VARCHAR(45) NULL,
   PRIMARY KEY (`idEstacion`),
@@ -129,10 +129,10 @@ ENGINE = InnoDB;
 -- Table `mydb`.`Auto`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Auto` (
-  `Numero_Chasis` INT NOT NULL,
+  `Numero_Chasis` INT NOT NULL AUTO_INCREMENT,
   `Modelo_idModelo` INT NULL,
-  `Patente` VARCHAR(45) NULL,
   `Terminado` TINYINT NULL,
+  `Patente` VARCHAR(45) NULL,
   PRIMARY KEY (`Numero_Chasis`))
 ENGINE = InnoDB;
 
@@ -161,10 +161,10 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Consecionaria`
+-- Table `mydb`.`Concesionaria`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Concesionaria` (
-  `idConcesionaria` INT NOT NULL,
+  `idConcesionaria` INT NOT NULL AUTO_INCREMENT,
   `nombreConcesionaria` VARCHAR(45) NULL,
   `numeroVentas` INT NULL,
   PRIMARY KEY (`idConcesionaria`))
@@ -175,7 +175,7 @@ ENGINE = InnoDB;
 -- Table `mydb`.`Pedido`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Pedido` (
-  `idPedido` INT NOT NULL,
+  `idPedido` INT NOT NULL AUTO_INCREMENT,
   `FechaEstimada` DATE NULL,
   `Concesionaria_idConcesionaria` INT NOT NULL,
   PRIMARY KEY (`idPedido`),
@@ -209,11 +209,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`DetallePedido` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
 //alta provedor
 DELIMITER $$
-CREATE PROCEDURE altaProvedor( IN  _idProvedor INT, IN  _Nombre_Provedor varchar(45))
+CREATE PROCEDURE altaProvedor(IN  _Nombre_Provedor varchar(45))
 BEGIN
-INSERT INTO Provedor (idProvedor, Nombre_Provedor) VALUES (_idProvedor,_Nombre_Provedor);
+INSERT INTO Provedor (Nombre_Provedor) VALUES (_Nombre_Provedor);
 END $$
 DELIMITER ;
 
@@ -236,10 +241,11 @@ DELIMITER ;
 
 /* Alta Auto */
 DELIMITER $$
-CREATE PROCEDURE altaAuto (IN _Numero_Chasis int, IN _Modelo_idModelo int, IN _Terminado tinyint)
+CREATE PROCEDURE altaAuto ( IN _Modelo_idModelo int)
 BEGIN
-Call Generador_patente();
-INSERT INTO Auto(Numero_Chasis,Modelo_idModelo,Terminado) VALUES (_Numero_Chasis,_Modelo_idModelo,_Terminado);
+declare patente varchar(45);
+CALL Generador_patente(@patente);
+INSERT INTO Auto(Modelo_idModelo,Patente,Terminado) VALUES (_Modelo_idModelo,@patente,0);
 END $$
 DELIMITER ;
 
@@ -261,15 +267,13 @@ DELETE from Auto WHERE Auto.Numero_Chasis = _Numero_Chasis;
 END $$
 DELIMITER ;
 
-
 -- AltaInsumo
 DELIMITER $$
-CREATE PROCEDURE altaInsumo( IN  _idInsumo INT, IN  _descripcion varchar(45), _precio INT)
+CREATE PROCEDURE altaInsumo(IN  _descripcion varchar(45), _precio INT)
 BEGIN
-INSERT INTO Insumo (idInsumo,descripcion,precio ) VALUES (_idInsumo,_descripcion,_precio);
+INSERT INTO Insumo (descripcion,precio ) VALUES (_descripcion,_precio);
 END $$
 DELIMITER ;
-
 
 -- Modificar Insumo
 DELIMITER $$
@@ -290,9 +294,9 @@ DELIMITER ;
 
 -- alta Concesionaria
 DELIMITER $$
-CREATE PROCEDURE altaConcesionaria( IN  _idConcesionaria INT, IN  _nombre_concesionaria varchar(45), IN _numero_ventas INT)
+CREATE PROCEDURE altaConcesionaria(IN  _nombre_concesionaria varchar(45), IN _numero_ventas INT)
 BEGIN
-INSERT INTO Concesionaria (idConcesionaria, nombre_concesionaria, numero_ventas) VALUES (_idConcesionaria,_Nombre_concesionaria,_numero_ventas);
+INSERT INTO Concesionaria (nombreConcesionaria, numeroVentas) VALUES (_Nombre_concesionaria,_numero_ventas);
 END $$
 DELIMITER ;
 
@@ -309,15 +313,16 @@ DELIMITER $$
 CREATE PROCEDURE modificarConcesionaria(IN _idConcesionaria INT, IN  _nombre_concesionaria varchar(45),IN _numero_ventas INT)
 BEGIN
 UPDATE Concesionaria SET Concesionaria.nombreConcesionaria = _nombre_concesionaria WHERE (idConcesionaria = _idConcesionaria);
-UPDATE Concesionaria SET Concesionaria.numero_ventas = _numero_ventas WHERE (idConcesionaria = _idConcesionaria);
+UPDATE Concesionaria SET Concesionaria.numeroVentas = _numero_ventas WHERE (idConcesionaria = _idConcesionaria);
 END $$
 DELIMITER ;
                                                                                   
 -- ALTA Pedido
 DELIMITER $$
-CREATE PROCEDURE altaPedido(IN _idPedido INT, IN _FechaEstimada DATE, IN _Consecionaria_idConsecionaria INT)
-begin
-INSERT INTO Pedido (idPedido, FechaEstimada, Consecionaria_idConsecionaria) VALUES (_idPedido, _FechaEstimada, _Consecionaria_idConsecionaria);
+CREATE PROCEDURE altaPedido(IN _Consecionaria_idConsecionaria INT, IN _id_Modelo INT, IN _cantidad INT)
+BEGIN
+INSERT INTO Pedido (Consecionaria_idConsecionaria) VALUES (_Consecionaria_idConsecionaria);
+CALL altaPedidoDetalle(_cantidad,IdPedido,_id_Modelo);
 END $$
 DELIMITER ;
 
@@ -339,9 +344,9 @@ DELIMITER ;
 
 -- ALTA ESTACION	
 DELIMITER $$
-CREATE PROCEDURE altaEstacion(IN _idEstacion INT, IN _Linea_Montaje_idLineaMontaje INT, IN _Nombre_Estacion VARCHAR(45))
+CREATE PROCEDURE altaEstacion( IN _Linea_Montaje_idLineaMontaje INT, IN _Nombre_Estacion VARCHAR(45))
 begin
-INSERT INTO Estacion (idEstacion, Linea_Montaje_idLineaMontaje, Nombre_Estacion) VALUES (_idEstacion, _Linea_Montaje_idLineaMontaje, _Nombre_Estacion);
+INSERT INTO Estacion (Linea_Montaje_idLineaMontaje, Nombre_Estacion) VALUES (_Linea_Montaje_idLineaMontaje, _Nombre_Estacion);
 END $$
 DELIMITER ;
 
@@ -363,9 +368,9 @@ DELIMITER ;
 
 -- alta Modelo
 DELIMITER $$
-CREATE PROCEDURE altaModelo( IN _idModelo INT, IN _Nombre_Modelo varchar (45))
+CREATE PROCEDURE altaModelo(IN _Nombre_Modelo varchar (45))
 BEGIN
-INSERT INTO Modelo (idModelo,Nombre_Modelo) values (_idModelo,_Nombre_Modelo);
+INSERT INTO Modelo (Nombre_Modelo) values (_Nombre_Modelo);
 END $$
 DELIMITER;
 
@@ -387,9 +392,9 @@ DELIMITER ;
        
 -- Alta Linea de montaje
 DELIMITER $$
-CREATE PROCEDURE altaLineaMontaje( IN  _idLineaMontaje INT, IN  _modelo_idModelo INT, IN _capacidad_produccion INT)
+CREATE PROCEDURE altaLineaMontaje(IN  _modelo_idModelo INT, IN _capacidad_produccion INT)
 BEGIN
-INSERT INTO LineaMontaje (idLineaMontaje, modelo_idModelo, CapacidadProduccion) VALUES (_idLineaMontaje,_modelo_idModelo,_capacidad_produccion);
+INSERT INTO LineaMontaje (modelo_idModelo, CapacidadProduccion) VALUES (_modelo_idModelo,_capacidad_produccion);
 END $$
 DELIMITER ;
 
@@ -434,24 +439,13 @@ UPDATE Pedido SET cantidad = _cantidad WHERE (idPedido = _idPedido);
 END$$
 DELIMITER ;
 
-CALL altaLineaMontaje (1,1,4);
-CALL modificarLineaMontaje(1,1,5);                                                                              
-                                                                             
-CALL altaConcesionaria (1,'Ford',5);
-CALL modificarConcesionaria(1,'FordArg',6);
-                                                                             
-CALL altaInsumo(1,'tornillos',30);
-CALL modificarInsumo(1,'bujias',50);    
-
-CALL altaProvedor(1,'GetulioCompany');
-CALL modificarProvedor(1,'GetuliosCompany');
-                                                                             
-                                                                             
+DELIMITER $$
 CREATE PROCEDURE Generador_patente(out patente varchar(20))
 BEGIN
+
 set patente = null;
 
-while (patente is null) or exists(select * from vehiculo where Numero_Chasis = patente) do 
+while (patente is null) do 
 SELECT CONCAT(
         FLOOR(RAND() * 10),
         FLOOR(RAND() * 10),
@@ -460,13 +454,24 @@ SELECT CONCAT(
       FLOOR(RAND() * 10),
       FLOOR(RAND() * 10),
       FLOOR(RAND() * 10)
-      ) into patente; 
+      ) into patente;
 
 END WHILE;
 END $$
-DELIMITER ;                                                                            
+DELIMITER ;
 
-                                                        
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+Call altaModelo('Forro');
+
+Call altaAuto(1);
+
+CALL altaLineaMontaje (1,4);
+CALL modificarLineaMontaje(1,1,5);                                                                              
+                                                                             
+CALL altaConcesionaria ('Ford',5);
+CALL modificarConcesionaria(1,'FordArg',6);
+                                                                             
+CALL altaInsumo('tornillos',30);
+CALL modificarInsumo(1,'bujias',50);    
+
+CALL altaProvedor('GetulioCompany');
+CALL modificarProvedor(1,'GetuliosCompany');
