@@ -193,7 +193,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`DetallePedido` (
   `Cantidad` INT NOT NULL,
-  `Pedido_idPedido` INT NOT NULL,
+  `Pedido_idPedido` INT NOT NULL AUTO_INCREMENT,
   `Modelo_idModelo` INT NOT NULL,
   INDEX `fk_DetallePedido_Pedido1_idx` (`Pedido_idPedido` ASC) VISIBLE,
   INDEX `fk_DetallePedido_Modelo1_idx` (`Modelo_idModelo` ASC) VISIBLE,
@@ -319,10 +319,11 @@ DELIMITER ;
                                                                                   
 -- ALTA Pedido
 DELIMITER $$
-CREATE PROCEDURE altaPedido(IN _Consecionaria_idConsecionaria INT, IN _id_Modelo INT, IN _cantidad INT)
+CREATE PROCEDURE altaPedido(IN _Concesionaria_idConcesionaria INT, IN _id_Modelo INT, IN _cantidad INT)
 BEGIN
-INSERT INTO Pedido (Consecionaria_idConsecionaria) VALUES (_Consecionaria_idConsecionaria);
-CALL altaPedidoDetalle(_cantidad,IdPedido,_id_Modelo);
+INSERT INTO Pedido (Concesionaria_idConcesionaria) VALUES (_Concesionaria_idConcesionaria);
+CALL altaPedidoDetalle(_cantidad,_id_Modelo);
+
 END $$
 DELIMITER ;
 
@@ -415,27 +416,27 @@ END $$
 DELIMITER ;
 
                                                                              
--- ALTA PedidoDetalle
+-- ALTA DetallePedido
 DELIMITER $$
-CREATE PROCEDURE altaPedidoDetalle (IN _idPedido INT, IN _idModelo INT, IN _cantidad INT)
+CREATE PROCEDURE altaDetallePedido ( IN _idModelo INT, IN _cantidad INT)
 begin
-INSERT INTO PedidoDetalle (idPedido, idModelo, cantidad) VALUES (_idPedido, _idModelo, _cantidad);
+INSERT INTO DetallePedido (idModelo, cantidad) VALUES (_idModelo, _cantidad);
 END $$
 DELIMITER ;
 
--- BAJA PedidoDetalle
+-- BAJA DetallePedido
 DELIMITER $$
-CREATE PROCEDURE bajaPedidoDetalle (IN _idPedido INT)
+CREATE PROCEDURE bajaDetallePedido (IN _idPedido INT)
 begin
-    delete from PedidoDetalle where PedidoDetalle.idPedido = _idPedido;
+    delete from DetallePedido where DetallePedido.idPedido = _idPedido;
 end $$
 delimiter;
 
--- MODIFICACION PedidoDetalle
+-- MODIFICACION DetallePedido
 DELIMITER $$
-CREATE PROCEDURE modificarPedidoDetalle (IN _idPedido INT, IN _idModelo INT, IN _cantidad INT)
+CREATE PROCEDURE modificarDetallePedido (IN _idPedido INT, IN _idModelo INT, IN _cantidad INT)
 begin
-UPDATE Pedido SET cantidad = _cantidad WHERE (idPedido = _idPedido);
+UPDATE DetallePedido SET cantidad = _cantidad WHERE (idPedido = _idPedido);
 END$$
 DELIMITER ;
 
@@ -475,3 +476,5 @@ CALL modificarInsumo(1,'bujias',50);
 
 CALL altaProvedor('GetulioCompany');
 CALL modificarProvedor(1,'GetuliosCompany');
+
+CALL altaPedido(1,1,5)
