@@ -233,9 +233,6 @@ begin
 end $$
 DELIMITER ;
 
-call altaProvedor(1,'GetulioCompany');
-call modificarProvedor(1,'GetuliosCompany');
-
 /* Alta Auto */
 DELIMITER $$
 CREATE PROCEDURE altaAuto (IN _Numero_Chasis int, IN _Modelo_idModelo int, IN _Terminado tinyint)
@@ -290,9 +287,6 @@ begin
 end $$
 DELIMITER ;
 
-call altaInsumo(1,'tornillos',30);
-call modificarInsumo(1,'bujias',50);
-
 -- alta Consecionaria
 DELIMITER $$
 CREATE PROCEDURE altaConsecionaria( IN  _idConcesionaria INT, IN  _nombre_concesionaria varchar(45), IN _numero_ventas INT)
@@ -317,9 +311,6 @@ UPDATE Concesionaria SET Concesionaria.nombreConcesionaria = _nombre_concesionar
 UPDATE Concesionaria SET Concesionaria.numero_ventas = _numero_ventas WHERE (idConcesionaria = _idConcesionaria);
 END $$
 DELIMITER ;
-
-call altaConcesionaria (1,Ford,5);
-call modificarConcesionaria(1,FordArg,6);
                                                                                   
 -- ALTA Pedido
 DELIMITER $$
@@ -411,15 +402,13 @@ DELIMITER ;
 
 -- Modificacion Linea de Montaje
 DELIMITER $$
-CREATE PROCEDURE modificarConcesionaria(IN _idLineaMontaje INT, IN  _modelo_idModelo INT,IN _capacidad_produccion INT)
+CREATE PROCEDURE modificarLineaMontaje(IN _idLineaMontaje INT, IN  _modelo_idModelo INT,IN _capacidad_produccion INT)
 BEGIN
 UPDATE LineaMontaje SET LineaMontaje.CapacidadProduccion = _capacidad_produccion WHERE (_idLineaMontaje = _idLineaMontaje);
 END $$
 DELIMITER ;
 
-CALL altaLineaMontaje (1,1,4);
-CALL modificacionLineaMontaje(1,1,5);                                                                                                                         
-                                                                                                                         
+                                                                             
 -- ALTA PedidoDetalle
 DELIMITER $$
 CREATE PROCEDURE altaPedidoDetalle (IN _idPedido INT, IN _idModelo INT, IN _cantidad INT)
@@ -444,6 +433,39 @@ UPDATE Pedido SET cantidad = _cantidad WHERE (idPedido = _idPedido);
 END$$
 DELIMITER ;
 
+CALL altaLineaMontaje (1,1,4);
+CALL modificacionLineaMontaje(1,1,5);                                                                              
+                                                                             
+CALL altaConcesionaria (1,'Ford',5);
+CALL modificarConcesionaria(1,'FordArg',6);
+                                                                             
+CALL altaInsumo(1,'tornillos',30);
+CALL modificarInsumo(1,'bujias',50);    
+
+CALL altaProvedor(1,'GetulioCompany');
+CALL modificarProvedor(1,'GetuliosCompany');
+                                                                             
+                                                                             
+CREATE PROCEDURE Generador_patente(out patente varchar(20))
+BEGIN
+set patente = null;
+
+while (patente is null) or exists(select * from vehiculo where Numero_Chasis = patente) do 
+SELECT CONCAT(
+        FLOOR(RAND() * 10),
+        FLOOR(RAND() * 10),
+        FLOOR(RAND() * 10),
+      "-",
+      FLOOR(RAND() * 10),
+      FLOOR(RAND() * 10),
+      FLOOR(RAND() * 10)
+      ) into patente; 
+
+END WHILE;
+END $$
+DELIMITER ;                                                                            
+
+                                                        
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
