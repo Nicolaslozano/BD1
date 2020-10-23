@@ -162,7 +162,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Consecionaria`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Consecionaria` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Concesionaria` (
   `idConsecionaria` INT NOT NULL,
   `nombreConsecionaria` VARCHAR(45) NULL,
   `numeroVentas` INT NULL,
