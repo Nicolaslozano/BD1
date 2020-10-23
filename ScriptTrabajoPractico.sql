@@ -163,8 +163,8 @@ ENGINE = InnoDB;
 -- Table `mydb`.`Consecionaria`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Concesionaria` (
-  `idConsecionaria` INT NOT NULL,
-  `nombreConsecionaria` VARCHAR(45) NULL,
+  `idConcesionaria` INT NOT NULL,
+  `nombreConcesionaria` VARCHAR(45) NULL,
   `numeroVentas` INT NULL,
   PRIMARY KEY (`idConsecionaria`))
 ENGINE = InnoDB;
@@ -176,12 +176,12 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `mydb`.`Pedido` (
   `idPedido` INT NOT NULL,
   `FechaEstimada` DATE NULL,
-  `Consecionaria_idConsecionaria` INT NOT NULL,
+  `Concesionaria_idConcesionaria` INT NOT NULL,
   PRIMARY KEY (`idPedido`),
-  INDEX `fk_Pedido_Consecionaria1_idx` (`Consecionaria_idConsecionaria` ASC) VISIBLE,
-  CONSTRAINT `fk_Pedido_Consecionaria1`
-    FOREIGN KEY (`Consecionaria_idConsecionaria`)
-    REFERENCES `mydb`.`Consecionaria` (`idConsecionaria`)
+  INDEX `fk_Pedido_Concesionaria1_idx` (`Concesionaria_idConcesionaria` ASC) VISIBLE,
+  CONSTRAINT `fk_Pedido_Concesionaria1`
+    FOREIGN KEY (`Concesionaria_idConcesionaria`)
+    REFERENCES `mydb`.`Concesionaria` (`idConcesionaria`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -287,9 +287,9 @@ begin
 end $$
 DELIMITER ;
 
--- alta Consecionaria
+-- alta Concesionaria
 DELIMITER $$
-CREATE PROCEDURE altaConsecionaria( IN  _idConcesionaria INT, IN  _nombre_concesionaria varchar(45), IN _numero_ventas INT)
+CREATE PROCEDURE altaConcesionaria( IN  _idConcesionaria INT, IN  _nombre_concesionaria varchar(45), IN _numero_ventas INT)
 BEGIN
 INSERT INTO Concesionaria (idConcesionaria, nombre_concesionaria, numero_ventas) VALUES (_idConcesionaria,_Nombre_concesionaria,_numero_ventas);
 END $$
