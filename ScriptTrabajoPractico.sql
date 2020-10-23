@@ -477,4 +477,4 @@ CALL modificarInsumo(1,'bujias',50);
 CALL altaProvedor('GetulioCompany');
 CALL modificarProvedor(1,'GetuliosCompany');
 
-CALL altaPedido(1,1,5)
+CALL altaPedido(1,1,5);
