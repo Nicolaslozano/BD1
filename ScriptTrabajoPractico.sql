@@ -295,7 +295,7 @@ call modificarInsumo(1,'bujias',50);
 
 -- alta Consecionaria
 DELIMITER $$
-CREATE PROCEDURE altaConsecioanria( IN  _idConcesionaria INT, IN  _nombre_concesionaria varchar(45), IN _numero_ventas INT)
+CREATE PROCEDURE altaConsecionaria( IN  _idConcesionaria INT, IN  _nombre_concesionaria varchar(45), IN _numero_ventas INT)
 BEGIN
 INSERT INTO Concesionaria (idConcesionaria, nombre_concesionaria, numero_ventas) VALUES (_idConcesionaria,_Nombre_concesionaria,_numero_ventas);
 END $$
