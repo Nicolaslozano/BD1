@@ -596,7 +596,7 @@ BEGIN
 
 IF EXISTS (SELECT Fecha_ingreso FROM AutoxEstacion e WHERE e.Estacion_idEstacion = _Estacion_idEstacion and e.Auto_idChasis = _Auto_idChasis) THEN
 BEGIN
-      IF (_Fecha_ingreso != (SELECT Fecha_ingreso FROM AutoxEstacion WHERE Auto_idChasis = _Auto_idChasis AND Estacion_idEstacion = _Estacion_idEstacion ORDER BY Fecha_ingreso DESC)) THEN
+      IF (_Fecha_ingreso != (SELECT Fecha_ingreso FROM AutoxEstacion WHERE Auto_idChasis = _Auto_idChasis AND Estacion_idEstacion = _Estacion_idEstacion ORDER BY Fecha_ingreso DESC LIMIT 1)) THEN
         BEGIN
            INSERT INTO AutoXEstacion (Estacion_idEstacion, Auto_idChasis, Fecha_ingreso, Fecha_salida) VALUES (_Estacion_idEstacion,_Auto_idChasis,_Fecha_ingreso, null);
         END ;
@@ -703,9 +703,9 @@ DELIMITER ;
 
 /* ************************************************************************************************************************************ */
 
-CALL altaModelo('Forro');
-CALL altaModelo('ForRITO');
-CALL altaModelo('Forraso');
+CALL altaModelo('Ka');
+CALL altaModelo('Supra');
+CALL altaModelo('Ram');
 
 CALL altaAuto(1);
 
