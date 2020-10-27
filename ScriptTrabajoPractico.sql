@@ -575,7 +575,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE bajaPedidoDetalle (IN _idPedido INT)
 BEGIN
-    DELETE FROM PedidoDetalle WHERE PedidoDetalle.idPedido = _idPedido;
+DELETE FROM PedidoDetalle WHERE PedidoDetalle.idPedido = _idPedido;
 END $$
 DELIMITER ;
 
@@ -594,9 +594,9 @@ DELIMITER $$
 CREATE PROCEDURE altaAutoxEstacion (IN _Estacion_idEstacion INT, IN _Auto_idChasis INT, IN _Fecha_ingreso DATE)
 BEGIN
 
-IF EXISTS (SELECT Fecha_ingreso FROM AutoxEstacion e WHERE e.Estacion_idEstacion = _Estacion_idEstacion) THEN
+IF EXISTS (SELECT Fecha_ingreso FROM AutoxEstacion e WHERE e.Estacion_idEstacion = _Estacion_idEstacion and e.Auto_idChasis = _Auto_idChasis) THEN
 BEGIN
-      IF (_Fecha_ingreso != (SELECT Fecha_ingreso FROM AutoxEstacion a WHERE a.Estacion_idEstacion = _Estacion_idEstacion)) THEN
+      IF (_Fecha_ingreso != (SELECT Fecha_ingreso FROM AutoxEstacion WHERE Auto_idChasis = _Auto_idChasis AND Estacion_idEstacion = _Estacion_idEstacion ORDER BY Fecha_ingreso DESC)) THEN
         BEGIN
            INSERT INTO AutoXEstacion (Estacion_idEstacion, Auto_idChasis, Fecha_ingreso, Fecha_salida) VALUES (_Estacion_idEstacion,_Auto_idChasis,_Fecha_ingreso, null);
         END ;
@@ -685,18 +685,21 @@ DELIMITER $$
 CREATE PROCEDURE SiguienteEstacion (IN _patente VARCHAR(25))
 BEGIN 
 DECLARE _auxChasis INT;
-DECLARE _auxModelo INT;
+DECLARE _auxFecha_ingreso DATE;
 DECLARE _auxIdEstacion INT;
 
 SET _auxChasis = (SELECT Numero_Chasis FROM Auto WHERE Auto.Patente=_Patente);
-SET _auxModelo = (SELECT Modelo_idModelo FROM Auto WHERE Auto.Patente=_Patente);
-SET _auxIdEstacion = (SELECT e.idEstacion FROM LineaMontaje l INNER JOIN Estacion e ON l.idLineaMontaje=e.LineaMontaje_idLineaMontaje WHERE e.Nombre_Estacion='Mecanica de Motor' and  l.Modelo_idModelo=_auxModelo);
+SET _auxFecha_ingreso = (SELECT Fecha_ingreso FROM AutoxEstacion WHERE Auto_idChasis = _auxChasis ORDER BY Fecha_ingreso DESC LIMIT 1);
+SET _auxIdEstacion = (SELECT Estacion_idEstacion FROM AutoxEstacion WHERE Fecha_ingreso = _auxFecha_ingreso and Auto_idChasis = _auxChasis ORDER BY Estacion_idEstacion DESC LIMIT 1);
 
 CALL modificarAutoxEstacion (_auxIdEstacion, _auxChasis, CURRENT_DATE());
 CALL altaAutoxEstacion(_auxIdEstacion + 1,_auxChasis,CURRENT_DATE());
 
 END $$
 DELIMITER ;
+
+-- SELECT Fecha_ingreso FROM AutoxEstacion WHERE Auto_idChasis = 1 AND Estacion_idEstacion = 1 ORDER BY Fecha_ingreso DESC; 
+-- drop schema mydb;
 
 /* ************************************************************************************************************************************ */
 
@@ -747,7 +750,9 @@ CALL altaPedido(1,1,5);
 
 /*
 SELECT Patente FROM Auto;
-CALL iniciarFabricacion ('055-100');
+CALL iniciarFabricacion ('016-706');
+CALL iniciarFabricacion ('408-318');
+CALL iniciarFabricacion ('407-685');
 SELECT * FROM AutoxEstacion;
-CALL SiguienteEstacion ('055-100');
+CALL SiguienteEstacion ('016-706');
 */
